@@ -19,8 +19,7 @@ def read_ply_(fp, newline):
  
         length = 0
         prop = []
-        dtype_map = {'uint16':'uint16', 'uint8':'uint8', 'double':'d', 'float64':'f8', 
-                     'float32':'f4', 'float': 'f4', 'uchar': 'B', 'int':'i'}
+        dtype_map = {'double':'d', 'float64':'f8', 'float32':'f4', 'float': 'f4', 'uchar': 'B', 'int':'i'}
         dtype = []
         fmt = 'binary'
 
@@ -31,7 +30,8 @@ def read_ply_(fp, newline):
                     fmt = 'ascii' 
             if 'element vertex' in line: N = int(line.split()[2])
             if 'property' in line: 
-                dtype.append(dtype_map[line.split()[1]])
+                typ = line.split()[1]
+                dtype.append(typ if typ not in dtype_map.keys() else dtype_map[typ])
                 prop.append(line.split()[2])
             if 'element face' in line:
                 raise Exception('.ply appears to be a mesh')
